@@ -1,0 +1,30 @@
+asgiref @ file:///C:/b/abs_ae1n0p_8_w/croot/asgiref_1724072476516/work
+certifi==2025.4.26
+cffi==1.17.1
+charset-normalizer==3.4.1
+cryptography==44.0.2
+dj-database-url==2.3.0
+Django @ file:///C:/b/abs_d8jy6px5xv/croot/django_1731616483677/work
+djangorestframework==3.15.2
+Faker==33.1.0
+gunicorn==23.0.0
+idna==3.10
+lxml==5.3.1
+mysqlclient==2.2.7
+packaging==25.0
+pdfminer.six==20250327
+pdfplumber==0.11.6
+pillow==11.1.0
+psycopg2-binary==2.9.10
+pycparser==2.22
+pypdfium2==4.30.1
+python-dateutil==2.9.0.post0
+python-docx==1.1.2
+requests==2.32.3
+setuptools==75.1.0
+six==1.17.0
+sqlparse @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/sqlparse_1699544474746/work
+typing_extensions==4.12.2
+urllib3==2.4.0
+wheel==0.44.0
+whitenoise==6.9.0

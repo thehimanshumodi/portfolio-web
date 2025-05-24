@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true" 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure--ki@34nbx-hk%#4!nf6pytk9l$ex199nj-=jnbc$zup0wt-n1a"
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your_long_random_development_key_here!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+# Remove hardcoded DEBUG True
+# DEBUG = True
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(',')
+if DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1'] + ALLOWED_HOSTS # For local testing
+else:
+    # Add wildcard or render.com domain for production
+    if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
+        ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -49,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "portfolio.urls"
@@ -76,10 +87,11 @@ WSGI_APPLICATION = "portfolio.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600, # Optional: keep connections alive for 10 min
+        ssl_require=True, # Recommended for secure connections
+    )
 }
 
 
@@ -121,6 +133,9 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
